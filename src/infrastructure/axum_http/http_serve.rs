@@ -18,14 +18,34 @@ use tower_http::{
 use tracing::info;
 
 pub async fn serve(config: Arc<DotEnvyConfig>, database_pool: Arc<PgPoolSquad>) -> Result<()> {
-    let app = Router::new()
+    let app = create_app(config.clone(), database_pool.clone());
+
+    let addr = SocketAddr::from(([0, 0, 0, 0], config.server.port));
+    let listener = TcpListener::bind(addr).await?;
+
+    // Log server startup information
+    info!("🚀 Server starting on http://{}", addr);
+    info!("Timeout configured for {} seconds", config.server.timeout);
+    info!("Request body limit set to {} MB", config.server.body_limit);
+
+    axum::serve(listener, app)
+        .with_graceful_shutdown(shutdown_signal())
+        .await?;
+
+    Ok(())
+}
+
+fn create_app(config: Arc<DotEnvyConfig>, database_pool: Arc<PgPoolSquad>) -> Router {
+    Router::new()
         .fallback(not_found)
         .route("/api/v1/health-check", get(health_check))
         .layer(TimeoutLayer::new(Duration::from_secs(
             config.server.timeout,
         )))
         .layer(RequestBodyLimitLayer::new(
-            (config.server.body_limit * 1024 * 1024).try_into()?,
+            (config.server.body_limit * 1024 * 1024)
+                .try_into()
+                .unwrap_or(10 * 1024 * 1024),
         ))
         .layer(
             CorsLayer::new()
@@ -38,18 +58,7 @@ pub async fn serve(config: Arc<DotEnvyConfig>, database_pool: Arc<PgPoolSquad>) 
                 ])
                 .allow_origin(Any),
         )
-        .layer(TraceLayer::new_for_http());
-
-    let addr = SocketAddr::from(([0, 0, 0, 0], config.server.port));
-    let listener = TcpListener::bind(addr).await?;
-    info!("Listening on port {}", config.server.port);
-    info!("Database pool: {:?}", database_pool);
-
-    axum::serve(listener, app)
-        .with_graceful_shutdown(shutdown_signal())
-        .await?;
-
-    Ok(())
+        .layer(TraceLayer::new_for_http())
 }
 
 async fn shutdown_signal() {

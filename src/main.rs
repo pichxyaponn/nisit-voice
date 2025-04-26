@@ -15,25 +15,24 @@ async fn main() {
     let dotenvy_config = match config::config_loader::load() {
         Ok(config) => config,
         Err(e) => {
-            tracing::error!("Failed to load config: {}", e);
+            tracing::error!("Failed to load configuration: {}", e);
             std::process::exit(1);
         }
     };
-
-    info!("Loaded .env config");
+    info!("📝 Configuration loaded successfully");
 
     let database_pool =
         match postgres_connection::establish_connection(&dotenvy_config.database.url) {
             Ok(pool) => pool,
             Err(e) => {
-                tracing::error!("Failed to establish connection to database: {}", e);
+                tracing::error!("Failed to establish database connection: {}", e);
                 std::process::exit(1);
             }
         };
+    info!("🔌 Database connection established successfully");
 
-    info!("Established connection to database");
-
+    info!("🌐 Starting HTTP server...");
     serve(Arc::new(dotenvy_config), Arc::new(database_pool))
         .await
-        .expect("Failed to start server");
+        .expect("Server error occurred");
 }

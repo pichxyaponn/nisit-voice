@@ -1,4 +1,9 @@
-use nisit_voice::{config, infrastructure::postgres::postgres_connection};
+use std::sync::Arc;
+
+use nisit_voice::{
+    config,
+    infrastructure::{axum_http::http_serve::serve, postgres::postgres_connection},
+};
 use tracing::{info, level_filters::LevelFilter};
 
 #[tokio::main]
@@ -17,13 +22,18 @@ async fn main() {
 
     info!("Loaded .env config");
 
-    let _ = match postgres_connection::establish_connection(&dotenvy_config.database.url) {
-        Ok(pool) => pool,
-        Err(e) => {
-            tracing::error!("Failed to establish connection to database: {}", e);
-            std::process::exit(1);
-        }
-    };
+    let database_pool =
+        match postgres_connection::establish_connection(&dotenvy_config.database.url) {
+            Ok(pool) => pool,
+            Err(e) => {
+                tracing::error!("Failed to establish connection to database: {}", e);
+                std::process::exit(1);
+            }
+        };
 
     info!("Established connection to database");
+
+    serve(Arc::new(dotenvy_config), Arc::new(database_pool))
+        .await
+        .expect("Failed to start server");
 }

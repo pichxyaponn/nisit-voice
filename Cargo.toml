@@ -5,7 +5,7 @@ edition = "2024"
 
 [dependencies]
 axum = "0.8.3" # ใช้ทำ HTTP Serve
-axum-extras = { version = "0.10.1", features = ["cookie", "typed-header"] } # ส่วนเสริมของ Axum ใช้ทำพวก Cookie และ Header
+axum-extra = { version = "0.10.1", features = ["cookie", "typed-header"] } # ส่วนเสริมของ Axum ใช้ทำพวก Cookie และ Header
 cookie = "0.18.1" # ทำให้สามารถเรียกใช้งาน cookie functions ได้
 async-trait = "0.1.88" # ใช้แปลงให้ trait สามารถรับ async fn ได้
 tokio = { version = "1.44.2", features = ["full"] } # ใช้สำหรับการทำให้เราสามารถเขียน concurrency ในรูปแบบของ async ได้

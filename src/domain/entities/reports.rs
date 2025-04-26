@@ -1,4 +1,6 @@
-use crate::infrastructure::postgres::schema::reports;
+use crate::{
+    domain::value_objects::report_model::ReportModel, infrastructure::postgres::schema::reports,
+};
 use chrono::NaiveDateTime;
 use diesel::prelude::*;
 
@@ -14,6 +16,23 @@ pub struct ReportEntity {
     pub updated_at: NaiveDateTime,
     pub resolved_at: Option<NaiveDateTime>,
     pub deleted_at: Option<NaiveDateTime>,
+}
+
+impl ReportEntity {
+    pub fn to_model(&self, staff_count: i64) -> ReportModel {
+        ReportModel {
+            id: self.id,
+            title: self.title.clone(),
+            description: self.description.clone(),
+            status: self.status.clone(),
+            nisit_id: self.nisit_id,
+            staff_count,
+            created_at: self.created_at,
+            updated_at: self.updated_at,
+            resolved_at: self.resolved_at,
+            deleted_at: self.deleted_at,
+        }
+    }
 }
 
 #[derive(Debug, Clone, Insertable, Queryable)]

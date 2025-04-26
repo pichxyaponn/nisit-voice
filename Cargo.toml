@@ -14,7 +14,7 @@ tracing = "0.1.41" # ใช้ทำ logging
 tracing-subscriber = "0.3.19" # ใช้ทำ logging
 serde = "1.0.219" # ใช้สำหรับการจัดการ JSON Format
 serde_json = "1.0.140" # ใช้สำหรับการจัดการ JSON Format
-chrono = "0.4.40" # ใช้จัดการเรื่อง Format ของเวลา
+chrono = { version = "0.4.40", features = ["serde"] } # ใช้จัดการเรื่อง Format ของเวลา
 mockall = "0.13.1" # ใช้สำหรับการทำ Mocking
 diesel = { version = "2.2.10", features = ["postgres", "serde_json", "chrono", "r2d2"] } # เป็น Database Client ที่เอาไว้ต่อกับ PostgreSQL ในรูปแบบ ORM
 dotenvy = "0.15.7" # ใช้จัดการ .env

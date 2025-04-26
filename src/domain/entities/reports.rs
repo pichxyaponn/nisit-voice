@@ -15,7 +15,7 @@ pub struct ReportEntity {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
     pub resolved_at: Option<NaiveDateTime>,
-    pub deleted_at: Option<NaiveDateTime>,
+    pub removed_at: Option<NaiveDateTime>,
 }
 
 impl ReportEntity {
@@ -30,7 +30,7 @@ impl ReportEntity {
             created_at: self.created_at,
             updated_at: self.updated_at,
             resolved_at: self.resolved_at,
-            deleted_at: self.deleted_at,
+            removed_at: self.removed_at,
         }
     }
 }
@@ -45,7 +45,7 @@ pub struct AddReportEntity {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
     pub resolved_at: Option<NaiveDateTime>,
-    pub deleted_at: Option<NaiveDateTime>,
+    pub removed_at: Option<NaiveDateTime>,
 }
 
 #[derive(Debug, Clone, AsChangeset, Queryable)]
@@ -56,5 +56,5 @@ pub struct EditReportEntity {
     pub nisit_id: i32,
     pub updated_at: NaiveDateTime,
     pub resolved_at: Option<NaiveDateTime>,
-    pub deleted_at: Option<NaiveDateTime>,
+    pub removed_at: Option<NaiveDateTime>,
 }

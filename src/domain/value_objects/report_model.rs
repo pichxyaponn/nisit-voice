@@ -14,7 +14,7 @@ pub struct ReportModel {
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
     pub resolved_at: Option<NaiveDateTime>,
-    pub deleted_at: Option<NaiveDateTime>,
+    pub removed_at: Option<NaiveDateTime>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -33,7 +33,7 @@ impl AddReportModel {
             created_at: Utc::now().naive_utc(),
             updated_at: Utc::now().naive_utc(),
             resolved_at: None,
-            deleted_at: None,
+            removed_at: None,
         }
     }
 }
@@ -52,7 +52,7 @@ impl EditReportModel {
             nisit_id,
             updated_at: Utc::now().naive_utc(),
             resolved_at: None,
-            deleted_at: None,
+            removed_at: None,
         }
     }
 }

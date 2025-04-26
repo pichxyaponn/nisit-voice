@@ -32,7 +32,7 @@ diesel::table! {
         created_at -> Timestamp,
         updated_at -> Timestamp,
         resolved_at -> Nullable<Timestamp>,
-        deleted_at -> Nullable<Timestamp>,
+        removed_at -> Nullable<Timestamp>,
     }
 }
 
@@ -52,4 +52,9 @@ diesel::joinable!(report_staff_junction -> reports (report_id));
 diesel::joinable!(report_staff_junction -> staff (staff_id));
 diesel::joinable!(reports -> nisits (nisit_id));
 
-diesel::allow_tables_to_appear_in_same_query!(nisits, report_staff_junction, reports, staff,);
+diesel::allow_tables_to_appear_in_same_query!(
+    nisits,
+    report_staff_junction,
+    reports,
+    staff,
+);

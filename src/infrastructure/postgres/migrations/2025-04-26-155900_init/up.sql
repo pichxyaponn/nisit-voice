@@ -8,7 +8,7 @@ CREATE TABLE reports (
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now(),
     resolved_at TIMESTAMP,
-    deleted_at TIMESTAMP
+    removed_at TIMESTAMP
 );
 
 CREATE TABLE staff (

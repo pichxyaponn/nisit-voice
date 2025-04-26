@@ -17,14 +17,13 @@ async fn main() {
 
     info!("Loaded .env config");
 
-    let postgres_pool =
-        match postgres_connection::establish_connection(&dotenvy_config.database.url) {
-            Ok(pool) => pool,
-            Err(e) => {
-                tracing::error!("Failed to establish connection to database: {}", e);
-                std::process::exit(1);
-            }
-        };
+    let _ = match postgres_connection::establish_connection(&dotenvy_config.database.url) {
+        Ok(pool) => pool,
+        Err(e) => {
+            tracing::error!("Failed to establish connection to database: {}", e);
+            std::process::exit(1);
+        }
+    };
 
     info!("Established connection to database");
 }

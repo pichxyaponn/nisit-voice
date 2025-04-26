@@ -5,7 +5,10 @@ use crate::{
 use anyhow::{Ok, Result};
 use axum::{Router, http::Method, routing::get};
 use std::{net::SocketAddr, sync::Arc, time::Duration};
-use tokio::net::TcpListener;
+use tokio::{
+    net::TcpListener,
+    signal::unix::{SignalKind, signal},
+};
 use tower_http::{
     cors::{Any, CorsLayer},
     limit::RequestBodyLimitLayer,
@@ -40,6 +43,7 @@ pub async fn serve(config: Arc<DotEnvyConfig>, db_pool: Arc<PgPoolSquad>) -> Res
     let addr = SocketAddr::from(([0, 0, 0, 0], config.server.port));
     let listener = TcpListener::bind(addr).await?;
     info!("Listening on port {}", config.server.port);
+    info!("Database pool: {:?}", db_pool);
 
     axum::serve(listener, app)
         .with_graceful_shutdown(shutdown_signal())
@@ -55,6 +59,15 @@ async fn shutdown_signal() {
             .expect("failed to install Ctrl+C handler");
     };
 
+    #[cfg(unix)]
+    let terminate = async {
+        signal(SignalKind::terminate())
+            .expect("failed to install SIGTERM handler")
+            .recv()
+            .await;
+    };
+
+    #[cfg(not(unix))]
     let terminate = std::future::pending::<()>();
 
     tokio::select! {

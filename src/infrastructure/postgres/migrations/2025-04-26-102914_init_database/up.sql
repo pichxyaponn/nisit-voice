@@ -4,7 +4,7 @@ CREATE TABLE reports (
     "title" VARCHAR(255) NOT NULL,
     "description" TEXT,
     "status" VARCHAR(100) NOT NULL,
-    nisit_id INTEGER,
+    nisit_id INTEGER NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT now(),
     updated_at TIMESTAMP NOT NULL DEFAULT now(),
     resolved_at TIMESTAMP,

@@ -1,1 +1,3 @@
-// TODO: implement domain entities
+pub mod nisits;
+pub mod reports;
+pub mod staff;

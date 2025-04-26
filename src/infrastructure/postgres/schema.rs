@@ -28,7 +28,7 @@ diesel::table! {
         description -> Nullable<Text>,
         #[max_length = 100]
         status -> Varchar,
-        nisit_id -> Nullable<Int4>,
+        nisit_id -> Int4,
         created_at -> Timestamp,
         updated_at -> Timestamp,
         resolved_at -> Nullable<Timestamp>,

@@ -1,0 +1,24 @@
+[package]
+name = "nisit-voice"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+axum = "0.8.3" # ใช้ทำ HTTP Serve
+axum-extras = { version = "0.10.1", features = ["cookie", "typed-header"] } # ส่วนเสริมของ Axum ใช้ทำพวก Cookie และ Header
+cookie = "0.18.1" # ทำให้สามารถเรียกใช้งาน cookie functions ได้
+async-trait = "0.1.88" # ใช้แปลงให้ trait สามารถรับ async fn ได้
+tokio = { version = "1.44.2", features = ["full"] } # ใช้สำหรับการทำให้เราสามารถเขียน concurrency ในรูปแบบของ async ได้
+tower-http = { version = "0.6.2", features = ["full"] } # ใช้จัดการ Middleware
+tracing = "0.1.41" # ใช้ทำ logging
+tracing-subscriber = "0.3.19" # ใช้ทำ logging
+serde = "1.0.219" # ใช้สำหรับการจัดการ JSON Format
+serde_json = "1.0.140" # ใช้สำหรับการจัดการ JSON Format
+chrono = "0.4.40" # ใช้จัดการเรื่อง Format ของเวลา
+mockall = "0.13.1" # ใช้สำหรับการทำ Mocking
+diesel = { version = "2.2.10", features = ["postgres", "serde_json", "chrono", "r2d2"] } # เป็น Database Client ที่เอาไว้ต่อกับ PostgreSQL ในรูปแบบ ORM
+dotenvy = "0.15.7" # ใช้จัดการ .env
+anyhow = "1.0.98" # ใช้จัดการให้การทำ Error Handling เป็นเรื่องที่ง่ายขึ้น
+argon2 = "0.5.3" # ใช้ hash password
+rand = "0.9.1" # ใช้ hash password
+jsonwebtoken = { version = "9.3.1", default-features = false } # ใช้ทำ jwt token

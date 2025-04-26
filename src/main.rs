@@ -1,4 +1,4 @@
-use nisit_voice::config;
+use nisit_voice::{config, infrastructure::postgres::postgres_connection};
 use tracing::{info, level_filters::LevelFilter};
 
 #[tokio::main]
@@ -16,4 +16,15 @@ async fn main() {
     };
 
     info!("Loaded .env config");
+
+    let postgres_pool =
+        match postgres_connection::establish_connection(&dotenvy_config.database.url) {
+            Ok(pool) => pool,
+            Err(e) => {
+                tracing::error!("Failed to establish connection to database: {}", e);
+                std::process::exit(1);
+            }
+        };
+
+    info!("Established connection to database");
 }

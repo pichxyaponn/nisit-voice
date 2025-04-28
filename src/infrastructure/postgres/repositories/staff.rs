@@ -1,7 +1,7 @@
 use crate::{
     domain::{
-        entities::staff::{RegisterStaffEntity, StaffEntity},
-        repositories::staff::StaffRepository,
+        entities::staff::StaffEntity, repositories::staff::StaffRepository,
+        value_objects::staff_model::RegisterStaffModel,
     },
     infrastructure::postgres::postgres_connection::PgPoolSquad,
 };
@@ -21,7 +21,7 @@ impl StaffPostgresRepository {
 
 #[async_trait]
 impl StaffRepository for StaffPostgresRepository {
-    async fn register(&self, register_staff_entity: RegisterStaffEntity) -> Result<i32> {
+    async fn register(&self, register_staff_model: RegisterStaffModel) -> Result<i32> {
         todo!("implement me")
     }
 

@@ -1,7 +1,7 @@
 use crate::{
     domain::{
-        entities::nisits::{NisitEntity, RegisterNisitEntity},
-        repositories::nisits::NisitRepository,
+        entities::nisits::NisitEntity, repositories::nisits::NisitRepository,
+        value_objects::nisit_model::RegisterNisitModel,
     },
     infrastructure::postgres::postgres_connection::PgPoolSquad,
 };
@@ -21,7 +21,7 @@ impl NisitPostgresRepository {
 
 #[async_trait]
 impl NisitRepository for NisitPostgresRepository {
-    async fn register(&self, register_nisit_entity: RegisterNisitEntity) -> Result<i32> {
+    async fn register(&self, mut register_nisit_model: RegisterNisitModel) -> Result<i32> {
         todo!("implement me")
     }
 

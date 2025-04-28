@@ -34,7 +34,7 @@ where
         &self,
         report_id: i32,
         nisit_id: i32,
-        edit_report_entity: EditReportModel,
+        edit_report_model: EditReportModel,
     ) -> Result<i32> {
         todo!("implement me")
     }

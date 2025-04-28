@@ -1,11 +1,12 @@
+use crate::{
+    domain::{
+        repositories::report_ops::ReportOpsRepository, value_objects::report_model::AddReportModel,
+    },
+    infrastructure::postgres::postgres_connection::PgPoolSquad,
+};
 use anyhow::Result;
 use async_trait::async_trait;
 use std::sync::Arc;
-
-use crate::{
-    domain::{entities::reports::AddReportEntity, repositories::report_ops::ReportOpsRepository},
-    infrastructure::postgres::postgres_connection::PgPoolSquad,
-};
 
 pub struct ReportOpsPostgresRepository {
     database_pool: Arc<PgPoolSquad>,
@@ -19,11 +20,11 @@ impl ReportOpsPostgresRepository {
 
 #[async_trait]
 impl ReportOpsRepository for ReportOpsPostgresRepository {
-    async fn add(&self, add_report_entity: AddReportEntity) -> Result<i32> {
+    async fn add(&self, add_report_model: AddReportModel) -> Result<i32> {
         todo!("implement me")
     }
 
-    async fn edit(&self, quest_id: i32, edit_report_entity: AddReportEntity) -> Result<i32> {
+    async fn edit(&self, quest_id: i32, edit_report_model: AddReportModel) -> Result<i32> {
         todo!("implement me")
     }
 

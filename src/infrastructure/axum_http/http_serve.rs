@@ -1,4 +1,7 @@
-use super::default_routers::{health_check, not_found};
+use super::{
+    default_routers::{health_check, not_found},
+    routers::*,
+};
 use crate::{
     config::config_model::DotEnvyConfig, infrastructure::postgres::postgres_connection::PgPoolSquad,
 };
@@ -18,7 +21,7 @@ use tower_http::{
 use tracing::info;
 
 pub async fn serve(config: Arc<DotEnvyConfig>, database_pool: Arc<PgPoolSquad>) -> Result<()> {
-    let app = create_app(config.clone(), database_pool.clone());
+    let app = create_app(config.clone(), Arc::clone(&database_pool));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], config.server.port));
     let listener = TcpListener::bind(addr).await?;
@@ -38,7 +41,33 @@ pub async fn serve(config: Arc<DotEnvyConfig>, database_pool: Arc<PgPoolSquad>) 
 fn create_app(config: Arc<DotEnvyConfig>, database_pool: Arc<PgPoolSquad>) -> Router {
     Router::new()
         .fallback(not_found)
-        .route("/api/v1/health-check", get(health_check))
+        .nest(
+            "/report-log",
+            report_log::routes(Arc::clone(&database_pool)),
+        )
+        .nest(
+            "/report-ops",
+            report_ops::routes(Arc::clone(&database_pool)),
+        )
+        .nest(
+            "/report-assignment",
+            report_assignment::routes(Arc::clone(&database_pool)),
+        )
+        .nest("/nisits", nisits::routes(Arc::clone(&database_pool)))
+        .nest("/staff", staff::routes(Arc::clone(&database_pool)))
+        .nest(
+            "/report-dashboard",
+            report_dashboard::routes(Arc::clone(&database_pool)),
+        )
+        .nest(
+            "/authentication/staff",
+            staff_authentication::routes(Arc::clone(&database_pool)),
+        )
+        .nest(
+            "/authentication/nisits",
+            nisits_authentication::routes(Arc::clone(&database_pool)),
+        )
+        .route("/health-check", get(health_check))
         .layer(TimeoutLayer::new(Duration::from_secs(
             config.server.timeout,
         )))

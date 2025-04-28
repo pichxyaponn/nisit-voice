@@ -19,6 +19,6 @@ mockall = "0.13.1" # ใช้สำหรับการทำ Mocking
 diesel = { version = "2.2.10", features = ["postgres", "serde_json", "chrono", "r2d2"] } # เป็น Database Client ที่เอาไว้ต่อกับ PostgreSQL ในรูปแบบ ORM
 dotenvy = "0.15.7" # ใช้จัดการ .env
 anyhow = "1.0.98" # ใช้จัดการให้การทำ Error Handling เป็นเรื่องที่ง่ายขึ้น
-argon2 = "0.5.3" # ใช้ hash password
+argon2 = { version = "0.5.3", features = ["std"] } # ใช้ hash password
 rand = "0.9.1" # ใช้ hash password
 jsonwebtoken = { version = "9.3.1", default-features = false } # ใช้ทำ jwt token

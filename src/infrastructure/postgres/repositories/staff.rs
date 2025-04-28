@@ -1,12 +1,13 @@
 use crate::{
     domain::{
-        entities::staff::StaffEntity, repositories::staff::StaffRepository,
-        value_objects::staff_model::RegisterStaffModel,
+        entities::staff::{RegisterStaffEntity, StaffEntity},
+        repositories::staff::StaffRepository,
     },
-    infrastructure::postgres::postgres_connection::PgPoolSquad,
+    infrastructure::postgres::{postgres_connection::PgPoolSquad, schema::staff},
 };
 use anyhow::Result;
 use async_trait::async_trait;
+use diesel::{dsl::insert_into, prelude::*};
 use std::sync::Arc;
 
 pub struct StaffPostgresRepository {
@@ -21,11 +22,25 @@ impl StaffPostgresRepository {
 
 #[async_trait]
 impl StaffRepository for StaffPostgresRepository {
-    async fn register(&self, register_staff_model: RegisterStaffModel) -> Result<i32> {
-        todo!("implement me")
+    async fn register(&self, register_staff_entity: RegisterStaffEntity) -> Result<i32> {
+        let mut connection = Arc::clone(&self.database_pool).get()?;
+
+        let inserted = insert_into(staff::table)
+            .values(&register_staff_entity)
+            .returning(staff::id)
+            .get_result::<i32>(&mut connection)?;
+
+        Ok(inserted)
     }
 
     async fn find_by_username(&self, username: &str) -> Result<StaffEntity> {
-        todo!("implement me")
+        let mut connection = Arc::clone(&self.database_pool).get()?;
+
+        let selected = staff::table
+            .filter(staff::username.eq(username))
+            .select(StaffEntity::as_select())
+            .first::<StaffEntity>(&mut connection)?;
+
+        Ok(selected)
     }
 }

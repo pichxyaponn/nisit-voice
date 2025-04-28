@@ -7,7 +7,7 @@ use crate::{
         postgres_connection::PgPoolSquad, repositories::staff::StaffPostgresRepository,
     },
 };
-use axum::{Json, Router, extract::State, response::IntoResponse, routing::post};
+use axum::{Json, Router, extract::State, http::StatusCode, response::IntoResponse, routing::post};
 use std::sync::Arc;
 
 pub fn routes(database_pool: Arc<PgPoolSquad>) -> Router {
@@ -26,6 +26,12 @@ pub async fn register<T>(
 where
     T: StaffRepository + Send + Sync,
 {
-    // Implement the registration logic here
-    "Register staff"
+    match staff_usecase.register(register_staff_model).await {
+        Ok(staff_id) => (
+            StatusCode::CREATED,
+            format!("Staff registered with ID: {}", staff_id),
+        )
+            .into_response(),
+        Err(err) => (StatusCode::INTERNAL_SERVER_ERROR, format!("Error: {}", err)).into_response(),
+    }
 }

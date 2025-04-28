@@ -31,7 +31,7 @@ jobs:
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}-${{ env.RUST_VERSION }}
 
       - name: Check formatting
-        run: cargo fmt --all -- --check
+        run: cargo fmt -- --check
 
       - name: Lint with Clippy
         run: cargo clippy --all-targets --all-features -- -D warnings # -D warnings ทำให้ warning กลายเป็น error

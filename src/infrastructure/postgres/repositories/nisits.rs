@@ -22,7 +22,7 @@ impl NisitPostgresRepository {
 
 #[async_trait]
 impl NisitRepository for NisitPostgresRepository {
-    async fn register(&self, mut register_nisit_entity: RegisterNisitEntity) -> Result<i32> {
+    async fn register(&self, register_nisit_entity: RegisterNisitEntity) -> Result<i32> {
         let mut connection = Arc::clone(&self.database_pool).get()?;
 
         let inserted = insert_into(nisits::table)

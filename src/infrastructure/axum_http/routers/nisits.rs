@@ -7,7 +7,7 @@ use crate::{
         postgres_connection::PgPoolSquad, repositories::nisits::NisitPostgresRepository,
     },
 };
-use axum::{Json, Router, extract::State, response::IntoResponse, routing::post};
+use axum::{Json, Router, extract::State, http::StatusCode, response::IntoResponse, routing::post};
 use std::sync::Arc;
 
 pub fn routes(database_pool: Arc<PgPoolSquad>) -> Router {
@@ -26,6 +26,12 @@ pub async fn register<T>(
 where
     T: NisitRepository + Send + Sync,
 {
-    // Implement the registration logic here
-    "Register Nisit"
+    match nisits_usecase.register(register_nisit_model).await {
+        Ok(nisits_id) => (
+            StatusCode::CREATED,
+            format!("Nisits registered with ID: {}", nisits_id),
+        )
+            .into_response(),
+        Err(err) => (StatusCode::INTERNAL_SERVER_ERROR, format!("Error: {}", err)).into_response(),
+    }
 }
